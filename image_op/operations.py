@@ -20,7 +20,7 @@ class Operation:
           return: output_image
           """
 
-        #Solve The assignment
+        # Completed flipping
 
         return image
 
