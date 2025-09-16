@@ -20,9 +20,23 @@ class Operation:
           return: output_image
           """
 
+        rows, cols = shape(image)[:2]
+        output_image = zeros(shape(image), uint8)
+
+        for r in range(rows):
+            for c in range(cols):
+                if direction == "horizontal":
+                    output_image[r][cols == 1 - c] = image [r][c]
+                elif direction == "vertical":
+                    output_image[rows - 1 - r][c] = image [r][c]
+                else:
+                    output_image[r][c] = image [r][c]
+                    raise Exception("Invalid direction")
+
         
 
-        return image
+        return output_image
+
 
     def chroma_keying(self, foreground, background, target_color, threshold):
         """
@@ -38,7 +52,21 @@ class Operation:
         """
 
         # add your code here
+        rows, cols = shape(foreground)[:2]
+        output_image = zeros(shape(foreground), uint8)
+
+        tr, tg, tb = target_color
+        for r in range(rows):
+            for c in range(cols):
+                fr, fg, fb = foreground[r][c]
+                distance = math.sqrt((fr - tg) ** 2 + (fb - tb) ** 2)
+
+                if distance < threshold:
+                    output_image[r][c] = background[r][c]
+                else:
+                    output_image[r][c] = foreground[r][c]
+
         # Please do not change the structure
-        return  foreground # Currently the input image is returned, please replace this with the color extracted image
+        return  output_image # Currently the input image is returned, please replace this with the color extracted image
 
    
